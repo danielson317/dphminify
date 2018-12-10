@@ -18,17 +18,8 @@ GLOBAL $url;
 $url = new URL();
 $path = $url->getPath();
 
-$registry = array(
-  '/' => 'home',
-  'home' => 'home',
-  'user' => 'userUpsertForm',
-  'users' => 'userListPage',
-  'login' => 'userLoginForm',
-  'unknown' => 'unknown',
-  'logout' => 'userLogout',
-  'links' => 'linkListPage'
-);
-
+// If the path is not defined it is probably a link. Attempt to redirect.
+$registry = getRegistry();
 if (!array_key_exists($path, $registry))
 {
   $link = getLink($path);
@@ -44,6 +35,7 @@ if (!array_key_exists($path, $registry))
   }
 }
 
+// A non-redirect path is found. Open the session and serve.
 session_name('dphmus');
 session_start();
 
@@ -61,6 +53,25 @@ echo $registry[$path]();
  * Pages.
  *
  ******************************************************************************/
+/**
+ * @return array
+ */
+function getRegistry()
+{
+  $registry = array(
+    '/' => 'home',
+    'home' => 'home',
+    'user' => 'userUpsertForm',
+    'users' => 'userListPage',
+    'login' => 'userLoginForm',
+    'unknown' => 'unknown',
+    'logout' => 'userLogout',
+    'links' => 'linkListPage'
+  );
+
+  return $registry;
+}
+
 function home()
 {
   $template = new HTMLTemplate();

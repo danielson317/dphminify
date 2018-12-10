@@ -19,7 +19,7 @@ function linkGenerateForm()
       do
       {
         $code = linkRandomCode();
-      } while (getLink($code));
+      } while (getLink($code) && array_key_exists($code, getRegistry()));
 
       createLink($code, $_POST['url']);
 
